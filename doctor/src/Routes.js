@@ -12,7 +12,7 @@ class Routes extends React.Component {
         <Router>
             <Stack key="root" hideNavBar>
               <Scene key="register" component={RegisterScreen} initial/>
-              <Scene key="afterLogin" component={AfterLogin} />
+              <Scene key="home" component={AfterLogin} />
             </Stack>
         </Router>
   }

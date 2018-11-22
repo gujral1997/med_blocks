@@ -4,7 +4,7 @@ import { Actions } from 'react-native-router-flux'
 
 
 import store from '../store/store'
-import { loginUserInitiated, loginUserSuccessful, loginUserFailed } from '../actions/userActions'
+import { loginUserInitiated, loginUserSuccessful, loginUserFailed } from '../reducers/UserReducer'
 
 export const userApi = {
 
@@ -21,7 +21,7 @@ export const userApi = {
         })
             .then(response => {
                 store.dispatch(loginUserSuccessful('Success'))
-                Actions.afterLogin()
+                Actions.home()
             }).catch(err=> {
                 store.dispatch(loginUserFailed('Login Failed'))
             })

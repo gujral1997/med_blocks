@@ -16,7 +16,7 @@ const ErrorBar = props =>
             : null
 
 ErrorBar.propTypes = {
-    in: PropTypes.bool,
+    in: PropTypes.string,
     error: PropTypes.string
 }
 

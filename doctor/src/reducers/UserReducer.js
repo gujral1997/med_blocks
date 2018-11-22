@@ -1,8 +1,20 @@
-import {
-    LOGIN_USER_FAILED,
-    LOGIN_USER_INITIATED,
-    LOGIN_USER_SUCCESSFUL
-} from '../actions/types'
+const LOGIN_USER_FAILED = 'LOGIN_USER_FAILED'
+const LOGIN_USER_INITIATED = 'LOGIN_USER_INITIATED'
+const LOGIN_USER_SUCCESSFUL = 'LOGIN_USER_SUCCESSFUL'
+
+export const loginUserInitiated =()=> ({
+    type: LOGIN_USER_INITIATED
+})
+
+export const loginUserFailed =message=> ({
+    type: LOGIN_USER_FAILED,
+    message
+})
+
+export const loginUserSuccessful =message=> ({
+    type: LOGIN_USER_SUCCESSFUL,
+    message
+})
 
 const INITIAL_STATE = {
     loading: false,

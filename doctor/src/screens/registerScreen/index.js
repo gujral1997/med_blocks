@@ -11,7 +11,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer'
 import {connect} from 'react-redux'
 import {Actions, ActionConst} from  'react-native-router-flux'
 
-import { Loader } from '../../components'
+import { Loader, ErrorBar } from '../../components'
 import assets from '../../themes/assets'
 import styles from './styles'
 import {userApi} from '../../api/userApi'
@@ -26,6 +26,10 @@ class RegisterScreen extends React.Component {
     render() {
         return(
             <ImageBackground style={styles.container} source={assets['background']}>
+                <ErrorBar
+                error = {this.props.message}
+                in = {this.props.message}
+                />
                 <View style={styles.subView}>
                     <TextInput
                         style={styles.input}
@@ -36,6 +40,7 @@ class RegisterScreen extends React.Component {
                         secureTextEntry
                         />
                     <TouchableOpacity 
+                        disabled = {!this.state.password}
                         onPress={()=>{
                             const {password} = this.state
                             userApi.login(password)
@@ -59,7 +64,8 @@ class RegisterScreen extends React.Component {
 }
 
 const mapStateToProps =state=> ({
-    loading: state.user.loading
+    loading: state.user.loading,
+    message: state.user.message
 })
 
 export default connect(mapStateToProps)(RegisterScreen)

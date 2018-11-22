@@ -10,13 +10,14 @@ const error = {
 export default StyleSheet.create({
     error: {
         ...center,
-        width: '85%',
+        width: '70%',
         backgroundColor: '#FEE0DE',
         marginTop: Metrics.HEIGHT*0.01,
         paddingTop: Metrics.HEIGHT*0.01,
         paddingBottom: Metrics.HEIGHT*0.01,
         borderRadius: 5,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: 10
         
     },
     errorText: {
