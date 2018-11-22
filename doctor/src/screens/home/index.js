@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 
 import styles from './styles'
 
-class AfterLogin extends React.Component {
+class Home extends React.Component {
     render() {
         return (
             <View style={styles.container}>
@@ -13,4 +13,4 @@ class AfterLogin extends React.Component {
     }
 }
 
-export default AfterLogin
+export default Home

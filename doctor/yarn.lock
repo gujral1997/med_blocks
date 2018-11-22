@@ -4631,6 +4631,11 @@ react-native-screens@^1.0.0-alpha.11:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.16.tgz#e3651b7077ea8fa04e8dd3265ad9b87f1f77a758"
   integrity sha512-t+/aq5jQa+Is6afiQHa1P+2UPnwPGY9NT0pSqNr2zQ5llCn8TcPq6GN8xDMuEc08g+y/9R5zWo32hlVStwWn1A==
 
+react-native-status-bar-height@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.1.0.tgz#cb70fcdbb8dfdf0b9140d77625d27e4ea32fd7f4"
+  integrity sha512-bkI12izmSaNjYDoPh/6MYQtxcpd3QnQn5/bvE8Rzk93DeyJas4d7QIbIoHf9PL1GUPXwvNW3ooH8WuB4fpSQ6w==
+
 react-native-svg@8.0.8:
   version "8.0.8"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-8.0.8.tgz#5d4c636751d9db2d98a9b3cfc4ef45c4eac65d60"

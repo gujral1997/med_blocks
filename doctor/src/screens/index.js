@@ -1,7 +1,7 @@
 import RegisterScreen from './registerScreen'
-import AfterLogin from './afterLogin'
+import Home from './home'
 
 export {
     RegisterScreen,
-    AfterLogin
+    Home
 }
