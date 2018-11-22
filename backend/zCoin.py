@@ -14,7 +14,7 @@ from urllib.parse import urlparse
 class Blockchain:
     def __init__(self):
         self.chain = []
-        self.transactions = []
+        self.medicalData = []
         self.create_block(proof = 1, previous_hash = '0')
         self.nodes = set()
 
@@ -23,9 +23,9 @@ class Blockchain:
                  'timestamp': str(datetime.datetime.now()),
                  'proof': proof,
                  'previous_hash': previous_hash,
-                 'transactions': self.transactions
+                 'medicalData': self.medicalData
                  }
-        self.transactions = []
+        self.medicalData = []
         self.chain.append(block)
         return block
 
@@ -65,9 +65,9 @@ class Blockchain:
 
 # Crypto currency part
 
-    def add_transaction(self, sender, reciever, amount):
-        self.transactions.append({
-            'sender': sender,
+    def add_data(self, gender, reciever, amount):
+        self.medicalData.append({
+            'gender': gender,
             'reciever': reciever,
             'amount': amount
         })
@@ -109,20 +109,31 @@ blockchain = Blockchain()
 
 # Mining a new block
 
-@app.route('/mine_block', methods = ['GET'])
+@app.route('/mine_block', methods = ['POST'])
 def mine_block():
+    obj = AES.new('This is a key12w', AES.MODE_CFB, '1234561234561234')
+    cipher = AES.new('1234561234561234',AES.MODE_ECB)
     previous_block = blockchain.get_previous_block()
     previous_proof = previous_block['proof']
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
-    blockchain.add_transaction(sender = node_address, reciever = 'Ansh', amount = 1)
+    json = request.get_json()
+    # blockchain.add_data(gender = node_address, reciever = 'Ansh', amount = 1)
+    transaction_keys = ['gender', 'receiver', 'amount']
+    if not all (key in json for key in transaction_keys):
+        return 'Some elements of the transaction are missing', 400
+    index = blockchain.add_data(
+        obj.encrypt(json['gender']).decode('utf-8', 'ignore'),
+        obj.encrypt(json['receiver']).decode('utf-8', 'ignore'),
+        obj.encrypt(json['amount']).decode('utf-8', 'ignore')
+        )
     block = blockchain.create_block(proof, previous_hash)
     response = {'message': 'Congrats, Block has been mined',
                 'index': block['index'],
                 'timestamp': block['timestamp'],
                 'proof': block['proof'],
                 'previous_hash': block['previous_hash'],
-                'transactions': block['transactions'] 
+                'medicalData': block['medicalData']
                 }
     return jsonify(response), 200
 
@@ -145,14 +156,14 @@ def is_valid():
         response = {'message': 'Chain is not valid'}
     return jsonify(response), 200
 
-# adding a new transactions to the blockchain
-@app.route('/add_transaction', methods = ['POST'])
-def add_transaction():
+# adding a new medicalData to the blockchain
+@app.route('/add_data', methods = ['POST'])
+def add_data():
     json = request.get_json()
-    transaction_keys = ['sender', 'receiver', 'amount']
+    transaction_keys = ['gender', 'receiver', 'amount']
     if not all (key in json for key in transaction_keys):
         return 'Some elements of the transaction are missing', 400
-    index = blockchain.add_transaction(json['sender'], json['receiver'], json['amount'])
+    index = blockchain.add_data(json['gender'], json['receiver'], json['amount'])
     response = {'message': f'this transaction will be added to block {index}'}
     return jsonify(response), 201
 
