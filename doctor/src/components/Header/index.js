@@ -18,9 +18,13 @@ export default class Header extends React.Component {
             <View style={styles.heading}>
                 <Text style={styles.headingText}>{this.props.heading}</Text>
             </View>
-            <TouchableOpacity style={styles.dropDown} onPress={this.props.onPress}>
-                <Text style={styles.text}>{this.props.buttonText}</Text>
-            </TouchableOpacity>
+            {
+                this.props.buttonText?
+                <TouchableOpacity style={styles.dropDown} onPress={this.props.onPress}>
+                    <Text style={styles.text}>{this.props.buttonText}</Text>
+                </TouchableOpacity>:
+                null
+            }
             </View>
         )
     }
