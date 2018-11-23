@@ -65,13 +65,14 @@ class Blockchain:
 
 # Crypto currency part
 
-    def add_data(self, gender, data, amount, name, doctor):
+    def add_data(self, gender, data, amount, name, doctor, hospital):
         self.medicalData.append({
             'gender': gender,
             'data': data,
             'amount': amount,
             'name': name,
-            'doctor': doctor
+            'doctor': doctor,
+            'hospital': hospital
         })
 
         previous_block = self.get_previous_block()
@@ -121,7 +122,7 @@ def mine_block():
     previous_hash = blockchain.hash(previous_block)
     json = request.get_json()
     # blockchain.add_data(gender = node_address, data = 'Ansh', amount = 1)
-    transaction_keys = ['gender', 'data', 'amount', 'name', 'doctor']
+    transaction_keys = ['gender', 'data', 'amount', 'name', 'doctor', 'hospital']
     if not all (key in json for key in transaction_keys):
         return 'Some elements of the transaction are missing', 400
     index = blockchain.add_data(
@@ -134,7 +135,8 @@ def mine_block():
         json['data'],
         json['amount'],
         json['name'],
-        json['doctor']
+        json['doctor'],
+        json['hospital']
         )
     block = blockchain.create_block(proof, previous_hash)
     response = {'message': 'Congrats, Block has been mined',
