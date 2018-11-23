@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import CryptoJS from 'crypto-js'
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux'
 
@@ -22,12 +22,15 @@ class Home extends React.Component {
     decrypt (message) {
        return CryptoJS.AES.decrypt(message, '1234561234561234').toString(CryptoJS.enc.Utf8)
     }
+    
 
     render() {
         return (
             <View style={styles.container}>
                 <Header
                 heading = "History"
+                buttonText = "Refresh"
+                onPress = {()=>Actions.home({type: ActionConst.RESET})}
                 />
                 {
                     this.props.response?

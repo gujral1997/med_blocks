@@ -1,9 +1,9 @@
 import RegisterScreen from './registerScreen'
 import Home from './home'
-import CreateMedblock from './createMedblock'
+import ViewMedblock from './viewMedblock'
 
 export {
     RegisterScreen,
     Home,
-    CreateMedblock
+    ViewMedblock
 }

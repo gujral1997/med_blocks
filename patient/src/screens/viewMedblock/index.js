@@ -28,58 +28,24 @@ import { medApi } from '../../api/userApi';
 class CreateMedblock extends React.Component {
     
     state={
-        heading: '',
         bgColor: '#0060FF',
-        keyboard: false,
-        name: '',
-        age: '',
-        gender: 'Male',
-        data: '',
-        doctor: '',
-        hospital: '',
-        passkey: ''
     }
 
-    componentDidMount=()=>{
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow)
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide)
-    }
-
-    encrypt (message) {
-        return CryptoJS.AES.encrypt(message, this.props.passkey).toString()
-    }
-
-    _keyboardDidShow=()=> {
-        this.setState({keyBoard: true})
-    }
-    
-    _keyboardDidHide=()=>{
-        this.setState({keyBoard: false})
-    }
-
-    componentDidUpdate() {
-        if(this.props.message==='Data saved successfully') {
-            this.refs.toast.show(this.props.message, 1000, () => {
-                store.dispatch(createBlockFailed(''))
-                setTimeout(()=>{
-                    Actions.pop()
-                }, 1000)
-            })
-        }
-
-        else if(this.props.message) {
-            this.refs.toast.show(this.props.message, 1000, () => {
-                store.dispatch(createBlockFailed(''))
-            })
-        }
-    }
+    decrypt (message) {
+        return CryptoJS.AES.decrypt(message, '1234561234561234').toString(CryptoJS.enc.Utf8)
+     }
 
     render() {
+
+        const { blockData } = this.props
+
         return (
             <View style={styles.container}>
                 <View style={[styles.header, {backgroundColor: this.state.bgColor}]}>
                     <View style={styles.headerIcons}>
-                        <TouchableOpacity style={styles.headerButtonLeft}  onPress={Actions.pop} disabled={this.state.disabled}>
+                        <TouchableOpacity style={styles.headerButtonLeft}  onPress={()=>{
+                            Actions.home({type: ActionConst.RESET})
+                        }} disabled={this.state.disabled}>
                             <Ionicons name='md-close' style={styles.headerIcon}/>
                         </TouchableOpacity>
                         <View style={styles.headerTextView}>
@@ -93,42 +59,10 @@ class CreateMedblock extends React.Component {
                             autoGrow
                             multiline
                             maxHeight={60}
-                            blurOnSubmit
-                            autoFocus
+                            editable = {false}
+                            defaultValue={this.decrypt(blockData.medicalData[0].heading)}
                             />
                         </View>
-                        <TouchableOpacity style={styles.headerButtonRight} onPress={()=>{
-                            const {
-                                heading,
-                                name,
-                                age,
-                                gender,
-                                data,
-                                doctor,
-                                hospital,
-                                passkey
-                            } = this.state
-                            if(!name||!age||!gender||!data||!doctor||!hospital||!passkey)
-                                store.dispatch(createBlockFailed('All fields are required'))
-
-                            else if (this.props.passkey!==passkey)
-                                store.dispatch(createBlockFailed('Wrong Passkey'))
-
-                            else {
-                                medApi.create(
-                                    this.encrypt(heading),
-                                    this.encrypt(name),
-                                    this.encrypt(age),
-                                    this.encrypt(gender),
-                                    this.encrypt(data),
-                                    this.encrypt(doctor),
-                                    this.encrypt(hospital)
-                                )
-                            }
-                        }}
-                        >
-                            <Text style={styles.headerText}>CREATE</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
                 <ScrollView style={styles.scrollView}>
@@ -139,6 +73,8 @@ class CreateMedblock extends React.Component {
                             underlineColorAndroid="transparent"
                             placeholder="Name"
                             placeholderTextColor="#666"
+                            editable = {false}
+                            defaultValue={this.decrypt(blockData.medicalData[0].name)}
                             />
                     </MedicalDescription>
                     <MedicalDescription type="Ionicons" icon="ios-person" border>
@@ -148,16 +84,20 @@ class CreateMedblock extends React.Component {
                             underlineColorAndroid="transparent"
                             placeholder="Age"
                             placeholderTextColor="#666"
+                            editable = {false}
+                            defaultValue={this.decrypt(blockData.medicalData[0].age)}
                             />
                     </MedicalDescription>
                     <MedicalDescription type="MaterialCommunityIcons" icon="gender-male-female" border>
-                        <Picker
-                            selectedValue={this.state.gender}
-                            style={styles.picker}
-                            onValueChange={(itemValue, itemIndex) => this.setState({gender: itemValue})}>
-                            <Picker.Item label="Male" value="Male" />
-                            <Picker.Item label="Female" value="Female" />
-                        </Picker>
+                        <TextInput
+                            style={styles.noteText}
+                            onChangeText={age => this.setState({age})}
+                            underlineColorAndroid="transparent"
+                            placeholder="Age"
+                            placeholderTextColor="#666"
+                            editable = {false}
+                            defaultValue={this.decrypt(blockData.medicalData[0].gender)}
+                            />
                     </MedicalDescription>
                     <MedicalDescription type="Entypo" icon="text" border>
                         <TextInput
@@ -168,6 +108,8 @@ class CreateMedblock extends React.Component {
                         spellCheck
                         placeholder="Add description"
                         placeholderTextColor="#666"
+                        editable = {false}
+                        defaultValue={this.decrypt(blockData.medicalData[0].data)}
                         />
                     </MedicalDescription>
                     <MedicalDescription type="MaterialCommunityIcons" icon="doctor" border>
@@ -177,6 +119,8 @@ class CreateMedblock extends React.Component {
                             underlineColorAndroid="transparent"
                             placeholder="Doctor Name"
                             placeholderTextColor="#666"
+                            editable = {false}
+                            defaultValue={this.decrypt(blockData.medicalData[0].doctor)}
                             />
                     </MedicalDescription>
                     <MedicalDescription type="MaterialCommunityIcons" icon="hospital-building" border>
@@ -186,37 +130,29 @@ class CreateMedblock extends React.Component {
                             underlineColorAndroid="transparent"
                             placeholder="Hospital Name"
                             placeholderTextColor="#666"
+                            editable = {false}
+                            defaultValue={this.decrypt(blockData.medicalData[0].hospital)}
                             />
                     </MedicalDescription>
-                    <MedicalDescription type="MaterialCommunityIcons" icon="onepassword" border>
+                    <MedicalDescription type="MaterialIcons" icon="access-time" border>
                         <TextInput
                             style={styles.noteText}
-                            onChangeText={passkey => this.setState({passkey})}
+                            onChangeText={hospital => this.setState({hospital})}
                             underlineColorAndroid="transparent"
-                            placeholder="Passkey"
+                            placeholder="Hospital Name"
                             placeholderTextColor="#666"
-                            secureTextEntry
+                            editable = {false}
+                            defaultValue={blockData.timestamp}
                             />
                     </MedicalDescription>
-                    <MedicalDescription type="Entypo" icon="google-drive" border>
-                        <Text style={styles.descriptionGray}>Add attachment</Text>
-                    </MedicalDescription>
                 </ScrollView>
-                <ScreenLoader show={this.props.loading} size={90} color="blue" />
-                <KeyboardSpacer/>
-                <Toast
-                ref="toast"
-                position={this.state.keyBoard?'top':'bottom'}
-                />
             </View>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    message: state.med.message,
-    loading: state.med.loading,
-    passkey: state.user.passkey
+    blockData: state.med.blockData
 });
 
 export default connect(mapStateToProps)(CreateMedblock)
