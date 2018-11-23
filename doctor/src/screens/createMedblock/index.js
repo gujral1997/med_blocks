@@ -12,6 +12,7 @@ import {
     ScrollView,
     TextInput
 } from 'react-native'
+import CryptoJS from 'crypto-js'
 import Toast from 'react-native-easy-toast'
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { Ionicons } from '@expo/vector-icons'
@@ -20,16 +21,23 @@ import { Actions, ActionConst } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 
 import {MedicalDescription, ScreenLoader} from '../../components'
+import store from '../../store/store';
+import { createBlockFailed } from '../../reducers/MedblockReducer';
+import { medApi } from '../../api/userApi';
 
 class CreateMedblock extends React.Component {
     
     state={
-        name: '',
-        bgColor: '#0060FF',
         heading: '',
-        note: '',
-        location: '',
-        keyboard: false
+        bgColor: '#0060FF',
+        keyboard: false,
+        name: '',
+        age: '',
+        gender: 'Male',
+        data: '',
+        doctor: '',
+        hospital: '',
+        passkey: ''
     }
 
     componentDidMount=()=>{
@@ -37,8 +45,8 @@ class CreateMedblock extends React.Component {
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide)
     }
 
-    componentWillUnmount() {
-
+    encrypt (message) {
+        return CryptoJS.AES.encrypt(message, this.props.passkey).toString()
     }
 
     _keyboardDidShow=()=> {
@@ -50,31 +58,21 @@ class CreateMedblock extends React.Component {
     }
 
     componentDidUpdate() {
-        // if(this.props.message==='Event created successfully') {
-        //     this.refs.toast.show(this.props.message, 1000, () => {
-        //         store.dispatch(createEventFailed(''))
-        //         this.setState({disabled: true})
-        //         setTimeout(()=>{
-        //             Actions.pop()
-        //         }, 1000)
-        //     })
-        // }
+        if(this.props.message==='Event created successfully') {
+            this.refs.toast.show(this.props.message, 1000, () => {
+                store.dispatch(createBlockFailed(''))
+                this.setState({disabled: true})
+                setTimeout(()=>{
+                    Actions.pop()
+                }, 1000)
+            })
+        }
 
-        // else if(this.props.message==='Event updated successfully') {
-        //     this.refs.toast.show(this.props.message, 1000, () => {
-        //         store.dispatch(updateEventMessage(''))
-        //         this.setState({disabled: true})
-        //         setTimeout(()=>{
-        //             Actions.pop({type: ActionConst.REFRESH})
-        //         }, 1000)
-        //     })
-        // }
-
-        // else if(this.props.message) {
-        //     this.refs.toast.show(this.props.message, 1000, () => {
-        //         store.dispatch(createEventFailed(''))
-        //     })
-        // }
+        else if(this.props.message) {
+            this.refs.toast.show(this.props.message, 1000, () => {
+                store.dispatch(createBlockFailed(''))
+            })
+        }
     }
 
     render() {
@@ -101,7 +99,33 @@ class CreateMedblock extends React.Component {
                             />
                         </View>
                         <TouchableOpacity style={styles.headerButtonRight} onPress={()=>{
-                            alert('hello')
+                            const {
+                                heading,
+                                name,
+                                age,
+                                gender,
+                                data,
+                                doctor,
+                                hospital,
+                                passkey
+                            } = this.state
+                            if(!name||!age||!gender||!data||!doctor||!hospital||!passkey)
+                                store.dispatch(createBlockFailed('All fields are required'))
+
+                            else if (this.props.passkey!==passkey)
+                                store.dispatch(createBlockFailed('Wrong Passkey'))
+
+                            else {
+                                medApi.create(
+                                    this.encrypt(heading),
+                                    this.encrypt(name),
+                                    this.encrypt(age),
+                                    this.encrypt(gender),
+                                    this.encrypt(data),
+                                    this.encrypt(doctor),
+                                    this.encrypt(hospital)
+                                )
+                            }
                         }}
                         >
                             <Text style={styles.headerText}>CREATE</Text>
@@ -191,7 +215,9 @@ class CreateMedblock extends React.Component {
 }
 
 const mapStateToProps = state => ({
-
+    message: state.med.message,
+    loading: state.med.loading,
+    passkey: state.user.passkey
 });
 
 export default connect(mapStateToProps)(CreateMedblock)
