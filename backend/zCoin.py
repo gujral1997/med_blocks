@@ -20,7 +20,7 @@ class Blockchain:
 
     def create_block(self, proof, previous_hash):
         block = {'index': len(self.chain) + 1,
-                 'timestamp': str(datetime.datetime.now()),
+                 'timestamp': datetime.datetime.now().strftime('%b %d, %Y'),
                  'proof': proof,
                  'previous_hash': previous_hash,
                  'medicalData': self.medicalData
