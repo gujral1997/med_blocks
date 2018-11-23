@@ -6,24 +6,16 @@ import React from 'react'
 import {
     View,
     TouchableOpacity,
-    Text,
-    Picker,
-    Keyboard,
     ScrollView,
     TextInput
 } from 'react-native'
 import CryptoJS from 'crypto-js'
-import Toast from 'react-native-easy-toast'
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { Ionicons } from '@expo/vector-icons'
 import styles from './styles'
 import { Actions, ActionConst } from 'react-native-router-flux'
 import { connect } from 'react-redux'
 
 import {MedicalDescription, ScreenLoader} from '../../components'
-import store from '../../store/store';
-import { createBlockFailed } from '../../reducers/MedblockReducer';
-import { medApi } from '../../api/userApi';
 
 class CreateMedblock extends React.Component {
     
@@ -32,7 +24,7 @@ class CreateMedblock extends React.Component {
     }
 
     decrypt (message) {
-        return CryptoJS.AES.decrypt(message, '1234561234561234').toString(CryptoJS.enc.Utf8)
+        return CryptoJS.AES.decrypt(message, this.props.passkey).toString(CryptoJS.enc.Utf8)
      }
 
     render() {
@@ -152,7 +144,8 @@ class CreateMedblock extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    blockData: state.med.blockData
+    blockData: state.med.blockData,
+    passkey: state.user.passkey
 });
 
 export default connect(mapStateToProps)(CreateMedblock)

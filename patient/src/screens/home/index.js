@@ -20,7 +20,7 @@ class Home extends React.Component {
     }
 
     decrypt (message) {
-       return CryptoJS.AES.decrypt(message, '1234561234561234').toString(CryptoJS.enc.Utf8)
+       return CryptoJS.AES.decrypt(message, this.props.passkey).toString(CryptoJS.enc.Utf8)
     }
     
 
