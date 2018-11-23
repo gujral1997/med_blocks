@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "doctor-app",
+    "name": "doctor_app",
     "description": "This project is really great.",
-    "slug": "doctor-app",
+    "slug": "doctor_app",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],
