@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux'
 
 import store from '../store/store'
 import { loginUserInitiated, loginUserSuccessful, loginUserFailed } from '../reducers/UserReducer'
+import { getChainFailed, getChainInitiated, getChainSuccessful } from '../reducers/MedblockReducer';
 
 export const userApi = {
 
@@ -20,7 +21,7 @@ export const userApi = {
             timeout: 15000
         })
             .then(response => {
-                store.dispatch(loginUserSuccessful('Success'))
+                store.dispatch(loginUserSuccessful('Success', password))
                 Actions.home()
             }).catch(err=> {
                 store.dispatch(loginUserFailed('Login Failed'))
@@ -29,23 +30,18 @@ export const userApi = {
 }
 
 export const medApi = {
-    create: () => {
+    get_chain: () => {
+        store.dispatch(getChainInitiated())
         return axios({
-            method: 'post',
-            url: `${LOCAL_HOST}/mine_block`,
-            data: {
-                "gender": "Hello Hi",
-                "data": "aasdasdasdasd",
-                "amount": "100",
-                "name": "Ansh",
-                "doctor": "Doctor"
-            },
+            method: 'get',
+            url: `${LOCAL_HOST}/get_chain`,
             timeout: 15000
         })
             .then(response => {
-                console.log(response)
+                console.log(response.data.chain[1].medicalData[0].age)
+                store.dispatch(getChainSuccessful(response.data.chain))
             }).catch(err=> {
-                console.log(err)
+                store.dispatch(createBlockFailed('Network Error'))
             })
     }
 }
