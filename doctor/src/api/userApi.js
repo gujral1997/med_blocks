@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux'
 
 import store from '../store/store'
 import { loginUserInitiated, loginUserSuccessful, loginUserFailed } from '../reducers/UserReducer'
+import { createBlockInitiated, createBlockSuccessful, createBlockFailed } from '../reducers/MedblockReducer';
 
 export const userApi = {
 
@@ -20,7 +21,7 @@ export const userApi = {
             timeout: 15000
         })
             .then(response => {
-                store.dispatch(loginUserSuccessful('Success'))
+                store.dispatch(loginUserSuccessful('Success', password))
                 Actions.home()
             }).catch(err=> {
                 store.dispatch(loginUserFailed('Login Failed'))
@@ -29,23 +30,34 @@ export const userApi = {
 }
 
 export const medApi = {
-    create: () => {
+    create: (
+        heading,
+        name,
+        age,
+        gender,
+        data,
+        doctor,
+        hospital
+    ) => {
+        store.dispatch(createBlockInitiated())
         return axios({
             method: 'post',
             url: `${LOCAL_HOST}/mine_block`,
             data: {
-                "gender": "Hello Hi",
-                "data": "aasdasdasdasd",
-                "amount": "100",
-                "name": "Ansh",
-                "doctor": "Doctor"
+                "heading": heading,
+                "gender": gender,
+                "data": data,
+                "age": age,
+                "name": name,
+                "doctor": doctor,
+                "hospital": hospital
             },
             timeout: 15000
         })
             .then(response => {
-                console.log(response)
+                store.dispatch(createBlockSuccessful('Data saved successfully'))
             }).catch(err=> {
-                console.log(err)
+                store.dispatch(createBlockFailed('Network Error'))
             })
     }
 }
