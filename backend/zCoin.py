@@ -65,11 +65,12 @@ class Blockchain:
 
 # Crypto currency part
 
-    def add_data(self, gender, data, amount, name, doctor, hospital):
+    def add_data(self, heading, gender, data, age, name, doctor, hospital):
         self.medicalData.append({
+            'heading': heading,
             'gender': gender,
             'data': data,
-            'amount': amount,
+            'age': age,
             'name': name,
             'doctor': doctor,
             'hospital': hospital
@@ -121,19 +122,20 @@ def mine_block():
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
     json = request.get_json()
-    # blockchain.add_data(gender = node_address, data = 'Ansh', amount = 1)
-    transaction_keys = ['gender', 'data', 'amount', 'name', 'doctor', 'hospital']
+    # blockchain.add_data(gender = node_address, data = 'Ansh', age = 1)
+    transaction_keys = ['gender', 'data', 'age', 'name', 'doctor', 'hospital', 'heading']
     if not all (key in json for key in transaction_keys):
         return 'Some elements of the transaction are missing', 400
     index = blockchain.add_data(
         # obj.encrypt(json['gender']).decode('utf-8', 'ignore'),
         # obj.encrypt(json['data']).decode('utf-8', 'ignore'),
-        # obj.encrypt(json['amount']).decode('utf-8', 'ignore'),
+        # obj.encrypt(json['age']).decode('utf-8', 'ignore'),
         # obj.encrypt(json['name']).decode('utf-8', 'ignore'),
         # obj.encrypt(json['doctor']).decode('utf-8', 'ignore')
+        json['heading'],
         json['gender'],
         json['data'],
-        json['amount'],
+        json['age'],
         json['name'],
         json['doctor'],
         json['hospital']
@@ -171,10 +173,10 @@ def is_valid():
 @app.route('/add_data', methods = ['POST'])
 def add_data():
     json = request.get_json()
-    transaction_keys = ['gender', 'data', 'amount']
+    transaction_keys = ['gender', 'data', 'age']
     if not all (key in json for key in transaction_keys):
         return 'Some elements of the transaction are missing', 400
-    index = blockchain.add_data(json['gender'], json['data'], json['amount'])
+    index = blockchain.add_data(json['gender'], json['data'], json['age'])
     response = {'message': f'this transaction will be added to block {index}'}
     return jsonify(response), 201
 
