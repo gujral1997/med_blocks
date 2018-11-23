@@ -1,18 +1,13 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import CryptoJS from 'crypto-js'
 
 import { Header } from '../../components'
 import styles from './styles'
-import { medApi } from '../../api/userApi';
+import { InfiniteAnimation } from '../../animations'
+import { Actions } from 'react-native-router-flux';
 
 class Home extends React.Component {
-
-    componentDidMount() {
-        // medApi.create()
-        // console.log(this.state.name)
-        // console.log(this.decrypt(this.state.name, '1234561234561234'))
-    }
 
     state = {
         name: this.encrypt('qasdsdasda', '1234561234561234')
@@ -32,6 +27,16 @@ class Home extends React.Component {
                 <Header
                 heading = "Home"
                 />
+                <View style={styles.main}>
+                    <TouchableOpacity
+                    onPress={()=>Actions.med()}
+                    >
+                        <InfiniteAnimation
+                        source = {'healthtap'}
+                        />
+                    </TouchableOpacity>
+                    <Text>Tap the icon for patient entry</Text>
+                </View>
             </View>
         )
     }

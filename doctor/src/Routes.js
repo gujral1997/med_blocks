@@ -12,9 +12,9 @@ class Routes extends React.Component {
     render = () =>
         <Router>
             <Stack key="root" hideNavBar>
-              <Scene key="register" component={RegisterScreen} />
+              <Scene key="register" component={RegisterScreen} initial/>
               <Scene key="home" component={Home} />
-              <Scene key="med" component={CreateMedblock} initial/>
+              <Scene key="med" component={CreateMedblock} />
             </Stack>
         </Router>
   }
