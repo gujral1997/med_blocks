@@ -1,18 +1,18 @@
-const LOGIN_USER_FAILED = 'LOGIN_USER_FAILED'
-const LOGIN_USER_INITIATED = 'LOGIN_USER_INITIATED'
-const LOGIN_USER_SUCCESSFUL = 'LOGIN_USER_SUCCESSFUL'
+const CREATE_BLOCK_FAILED = 'CREATE_BLOCK_FAILED'
+const CREATE_BLOCK_INITIATED = 'CREATE_BLOCK_INITIATED'
+const CREATE_BLOCK_SUCCESSFUL = 'CREATE_BLOCK_SUCCESSFUL'
 
-export const loginUserInitiated =()=> ({
-    type: LOGIN_USER_INITIATED
+export const createBlockInitiated =()=> ({
+    type: CREATE_BLOCK_INITIATED
 })
 
-export const loginUserFailed =message=> ({
-    type: LOGIN_USER_FAILED,
+export const createBlockFailed =message=> ({
+    type: CREATE_BLOCK_FAILED,
     message
 })
 
-export const loginUserSuccessful =(message, payload)=> ({
-    type: LOGIN_USER_SUCCESSFUL,
+export const createBlockSuccessful =(message, payload)=> ({
+    type: CREATE_BLOCK_SUCCESSFUL,
     payload,
     message
 })
@@ -20,31 +20,31 @@ export const loginUserSuccessful =(message, payload)=> ({
 const INITIAL_STATE = {
     loading: false,
     message: '',
-    passkey: ''
+    response: ''
 }
 
 export default (state = INITIAL_STATE, action) => {
     switch(action.type) {
 
-        case LOGIN_USER_INITIATED:
+        case CREATE_BLOCK_INITIATED:
             return {
                 ...state,
                 loading: true
             }
         
-        case LOGIN_USER_FAILED:
+        case CREATE_BLOCK_FAILED:
             return {
                 ...state,
                 loading: false,
                 message: action.message
             }
 
-        case LOGIN_USER_SUCCESSFUL:
+        case CREATE_BLOCK_SUCCESSFUL:
             return {
                 ...state,
                 loading: false,
                 message: action.message,
-                passkey: action.payload
+                response: action.payload
             }
 
         default:
