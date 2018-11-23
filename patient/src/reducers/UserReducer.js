@@ -11,14 +11,16 @@ export const loginUserFailed =message=> ({
     message
 })
 
-export const loginUserSuccessful =message=> ({
+export const loginUserSuccessful =(message, payload)=> ({
     type: LOGIN_USER_SUCCESSFUL,
+    payload,
     message
 })
 
 const INITIAL_STATE = {
     loading: false,
-    message: ''
+    message: '',
+    passkey: ''
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,7 +43,8 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 loading: false,
-                message: action.message
+                message: action.message,
+                passkey: action.payload
             }
 
         default:
